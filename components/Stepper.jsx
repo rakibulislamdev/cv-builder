@@ -12,36 +12,74 @@ const steps = [
 ]
 
 export default function Stepper() {
-    const currentStep = useSelector((state) => state.cv.currentStep)
+    // Assuming 'currentStep' is a number from 1 to 7, default to 1
+    const currentStep = useSelector((state) => state.cv.currentStep) || 1
+
+    // Calculate the percentage width for the green progress bar.
+    const progressWidth = ((currentStep - 1) / (steps.length - 1)) * 100
 
     return (
-        <div className="flex items-center justify-center py-6 bg-white border-b shadow-sm">
-            <div className="flex items-center space-x-4 md:space-x-8 overflow-x-auto">
-                {steps.map((step, index) => (
-                    <div key={step.number} className="flex items-center flex-shrink-0">
-                        <div className={`flex flex-col items-center ${index + 1 === currentStep ? 'text-blue-600' :
-                            index + 1 < currentStep ? 'text-green-600' : 'text-gray-400'
-                            }`}>
-                            <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 ${index + 1 === currentStep ? 'border-blue-600 bg-blue-50' :
-                                index + 1 < currentStep ? 'border-green-600 bg-green-50' : 'border-gray-300'
-                                }`}>
-                                <span className={`font-semibold text-sm ${index + 1 === currentStep ? 'text-blue-600' :
-                                    index + 1 < currentStep ? 'text-green-600' : 'text-gray-400'
-                                    }`}>
-                                    {step.number}
-                                </span>
-                            </div>
-                            <span className="text-xs mt-2 font-medium whitespace-nowrap">
-                                {step.title}
-                            </span>
-                        </div>
+        <div className="w-full px-4 py-6 sm:px-6 sm:py-10 bg-white">
+            <div className="relative max-w-7xl mx-auto">
 
-                        {index < steps.length - 1 && (
-                            <div className={`w-8 md:w-12 h-0.5 mx-2 md:mx-4 ${index + 1 < currentStep ? 'bg-green-600' : 'bg-gray-300'
-                                }`} />
-                        )}
-                    </div>
-                ))}
+
+                <div className="absolute top-4 sm:top-6 left-[90px] right-4 h-0.5 bg-gray-300"></div>
+
+
+                <div
+                    className="absolute top-4 sm:top-6 left-[90px] h-0.5 bg-green-500 transition-all duration-500"
+
+                    style={{ width: `${progressWidth}%` }}
+                ></div>
+
+
+                <div className="flex justify-between flex-wrap">
+                    {steps.map((step, index) => {
+                        const stepNum = index + 1
+                        const isActive = stepNum === currentStep
+
+
+                        const isCompleted = stepNum < currentStep
+
+                        return (
+                            <div
+                                key={step.number}
+                                className="flex flex-col items-center w-1/7 min-w-0"
+                            >
+
+
+                                <div
+                                    className={`w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-bold text-base sm:text-lg transition-all relative z-10
+                                        ${!isActive
+                                            ? 'bg-white text-gray-500 border-2 border-gray-300'
+                                            : ''
+                                        }
+                                        ${isActive
+                                            ? 'bg-green-500 text-white border-2 border-green-500'
+                                            : ''
+                                        }
+                                    `}
+                                >
+
+                                    {step.number}
+                                </div>
+
+
+                                <div className="mt-2 sm:mt-4 text-center px-1">
+                                    <span
+                                        className={`block text-xs sm:text-sm font-medium 
+                                            ${isActive
+                                                ? 'text-green-600 font-bold'
+                                                : 'text-gray-500'
+                                            }`}
+                                    >
+                                        {step.title}
+                                    </span>
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
             </div>
         </div>
     )
