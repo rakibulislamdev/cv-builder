@@ -98,7 +98,7 @@ export default function Review() {
                                     <h2 className="text-2xl font-bold uppercase">
                                         {cvData.personalInfo.firstName} {cvData.personalInfo.lastName}
                                     </h2>
-                                    <p className="text-lg text-gray-600">UX/UI Designer</p>
+                                    <p className="text-lg text-gray-600">{cvData.jobTitle}</p>
                                     <div className="flex justify-center gap-4 mt-2 text-sm">
                                         <span>{cvData.personalInfo.phone}</span>
                                         <span>{cvData.personalInfo.email}</span>

@@ -6,10 +6,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useDispatch, useSelector } from "react-redux"
 import { updatePersonalInfo, setCurrentStep } from "@/lib/cvSlice"
-// Lucide Icon
-import { ChevronDown, Globe } from "lucide-react" // Globe icon for left side, ChevronDown for right side
+import { ChevronDown } from "lucide-react"
 
-// --- Sample Country List for the Select Field ---
+
 const COUNTRIES = [
     { value: "Bangladesh", label: "Bangladesh" },
     { value: "United States", label: "United States" },
@@ -41,7 +40,7 @@ export default function PersonalInfo() {
     // ---------------------------------
 
     const { register, handleSubmit, formState: { errors } } = useForm({
-        // Pass the combined default/Redux values to react-hook-form
+
         defaultValues: defaultFormValues
     })
 
