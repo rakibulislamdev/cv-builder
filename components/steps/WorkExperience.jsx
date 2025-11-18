@@ -128,11 +128,40 @@ export default function WorkExperience() {
             size: (file.size / (1024 * 1024)).toFixed(2) + ' MB'
         }))
         setUploadedFiles(prev => [...prev, ...newFiles])
+
+        // Store file information in achievements
+        const fileNames = files.map(file => file.name)
+        const updatedExperiences = experiences.map((exp, i) => {
+            if (i === 0) {
+                return {
+                    ...exp,
+                    achievements: [...exp.achievements, ...fileNames]
+                }
+            }
+            return exp
+        })
+        setExperiences(updatedExperiences)
     }
 
     const removeFile = (index) => {
+        const fileToRemove = uploadedFiles[index]
         const updatedFiles = uploadedFiles.filter((_, i) => i !== index)
         setUploadedFiles(updatedFiles)
+
+        // Remove from achievements too
+        const updatedExperiences = experiences.map((exp, i) => {
+            if (i === 0) {
+                const updatedAchievements = exp.achievements.filter(achievement =>
+                    achievement !== fileToRemove.name
+                )
+                return {
+                    ...exp,
+                    achievements: updatedAchievements
+                }
+            }
+            return exp
+        })
+        setExperiences(updatedExperiences)
     }
 
     const handleBrowseClick = () => {
@@ -148,15 +177,28 @@ export default function WorkExperience() {
         e.preventDefault()
         const formattedExperiences = experiences.map(exp => ({
             ...exp,
-            startDate: exp.startDate ? format(exp.startDate, 'yyyy-MM') : '',
-            endDate: exp.endDate ? format(exp.endDate, 'yyyy-MM') : '',
-            skills: exp.skills || []
+
+            startDate: exp.startDate ? format(exp.startDate, 'dd/MM/yyyy') : '',
+            endDate: exp.endDate ? format(exp.endDate, 'dd/MM/yyyy') : '',
+
+            skills: exp.skills || [],
+
+            achievements: exp.achievements || []
         }))
         dispatch(updateWorkExperience(formattedExperiences))
         dispatch(setCurrentStep(4))
     }
 
     const onSkip = () => {
+
+        const formattedExperiences = experiences.map(exp => ({
+            ...exp,
+            startDate: exp.startDate ? format(exp.startDate, 'dd/MM/yyyy') : '',
+            endDate: exp.endDate ? format(exp.endDate, 'dd/MM/yyyy') : '',
+            skills: exp.skills || [],
+            achievements: exp.achievements || []
+        }))
+        dispatch(updateWorkExperience(formattedExperiences))
         dispatch(setCurrentStep(4))
     }
 
@@ -247,7 +289,7 @@ export default function WorkExperience() {
                                                             !exp.startDate && "text-gray-400"
                                                         )}
                                                     >
-                                                        {exp.startDate ? format(exp.startDate, "MMM yyyy") : "Start Date"}
+                                                        {exp.startDate ? format(exp.startDate, "dd/MM/yyyy") : "Start Date"}
                                                         <CalendarIcon className="ml-2 h-4 w-4 opacity-50" />
                                                     </Button>
                                                 </PopoverTrigger>
@@ -257,9 +299,6 @@ export default function WorkExperience() {
                                                         selected={exp.startDate}
                                                         onSelect={(date) => updateExperience(index, "startDate", date)}
                                                         initialFocus
-                                                        captionLayout="dropdown-buttons"
-                                                        fromYear={1960}
-                                                        toYear={2030}
                                                     />
                                                 </PopoverContent>
                                             </Popover>
@@ -277,7 +316,7 @@ export default function WorkExperience() {
                                                             !exp.endDate && "text-gray-400"
                                                         )}
                                                     >
-                                                        {exp.endDate ? format(exp.endDate, "MMM yyyy") : "End Date"}
+                                                        {exp.endDate ? format(exp.endDate, "dd/MM/yyyy") : "End Date"}
                                                         <CalendarIcon className="ml-2 h-4 w-4 opacity-50" />
                                                     </Button>
                                                 </PopoverTrigger>
@@ -287,9 +326,6 @@ export default function WorkExperience() {
                                                         selected={exp.endDate}
                                                         onSelect={(date) => updateExperience(index, "endDate", date)}
                                                         initialFocus
-                                                        captionLayout="dropdown-buttons"
-                                                        fromYear={1960}
-                                                        toYear={2030}
                                                     />
                                                 </PopoverContent>
                                             </Popover>
