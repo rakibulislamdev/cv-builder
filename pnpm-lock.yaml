@@ -26,6 +26,9 @@ importers:
       '@reduxjs/toolkit':
         specifier: ^2.10.1
         version: 2.10.1(react-redux@9.2.0(react@19.2.0)(redux@5.0.1))(react@19.2.0)
+      ai:
+        specifier: ^5.0.95
+        version: 5.0.95(zod@4.1.12)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -43,10 +46,10 @@ importers:
         version: 0.554.0(react@19.2.0)
       next:
         specifier: 16.0.3
-        version: 16.0.3(@babel/core@7.28.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 16.0.3(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       next-redux-wrapper:
         specifier: ^8.1.0
-        version: 8.1.0(next@16.0.3(@babel/core@7.28.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-redux@9.2.0(react@19.2.0)(redux@5.0.1))(react@19.2.0)
+        version: 8.1.0(next@16.0.3(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-redux@9.2.0(react@19.2.0)(redux@5.0.1))(react@19.2.0)
       react:
         specifier: 19.2.0
         version: 19.2.0
@@ -92,6 +95,12 @@ importers:
         version: 1.4.0
 
 packages:
+
+  '@ai-sdk/gateway@2.0.11':
+    resolution: {integrity: sha512-B0Vt2Xv88Lo9rg861Oyzq/SdTmT4LiqdjkpOxpSPpNk8Ih5TXTgyDAsV/qW14N6asPdK1YI5PosFLnVzfK5LrA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3.25.76 || ^4.1.8
 
   '@ai-sdk/google@2.0.34':
     resolution: {integrity: sha512-zIDWktv8bj/907EZjbzaelbTqIaOqtLVq3v2wQp9A7WuqaRVRJ8vAiwQy/dGBdN0Sj5/X01HVhj5eU6xHgHgAg==}
@@ -486,6 +495,10 @@ packages:
   '@nolyfill/is-core-module@1.0.39':
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
+
+  '@opentelemetry/api@1.9.0':
+    resolution: {integrity: sha512-3giAOQvZiH5F9bMlMiv8+GSPMeqg0dbaeo58/0SlA9sxSqZhnUtxzX9/2FzyhS9sWQf5S0GJE0AKBrFqjpeYcg==}
+    engines: {node: '>=8.0.0'}
 
   '@radix-ui/number@1.1.1':
     resolution: {integrity: sha512-MkKCwxlXTgz6CFoJx3pCwn07GKp36+aZyu/u2Ln2VrA5DcdyCZkASEDBTd8x5whTQQL5CiYf4prXKLcgQdv29g==}
@@ -1080,6 +1093,10 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@vercel/oidc@3.0.3':
+    resolution: {integrity: sha512-yNEQvPcVrK9sIe637+I0jD6leluPxzwJKx/Haw6F4H77CdDsszUn5V3o96LPziXkSNE2B83+Z3mjqGKBK/R6Gg==}
+    engines: {node: '>= 20'}
+
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
     peerDependencies:
@@ -1089,6 +1106,12 @@ packages:
     resolution: {integrity: sha512-NZyJarBfL7nWwIq+FDL6Zp/yHEhePMNnnJ0y3qfieCrmNvYct8uvtiV41UvlSe6apAfk0fY1FbWx+NwfmpvtTg==}
     engines: {node: '>=0.4.0'}
     hasBin: true
+
+  ai@5.0.95:
+    resolution: {integrity: sha512-dsvFdYMeGP08zuUQkhKO1UMMXMCb+nro9ZmDdwaAkkTlCGkP3u1S+xaRUDNayu/c0KVkiTtfEroPG//U+kvXzg==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: ^3.25.76 || ^4.1.8
 
   ajv@6.12.6:
     resolution: {integrity: sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==}
@@ -2499,6 +2522,13 @@ packages:
 
 snapshots:
 
+  '@ai-sdk/gateway@2.0.11(zod@4.1.12)':
+    dependencies:
+      '@ai-sdk/provider': 2.0.0
+      '@ai-sdk/provider-utils': 3.0.17(zod@4.1.12)
+      '@vercel/oidc': 3.0.3
+      zod: 4.1.12
+
   '@ai-sdk/google@2.0.34(zod@4.1.12)':
     dependencies:
       '@ai-sdk/provider': 2.0.0
@@ -2876,6 +2906,8 @@ snapshots:
       fastq: 1.19.1
 
   '@nolyfill/is-core-module@1.0.39': {}
+
+  '@opentelemetry/api@1.9.0': {}
 
   '@radix-ui/number@1.1.1': {}
 
@@ -3340,11 +3372,21 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.11.1':
     optional: true
 
+  '@vercel/oidc@3.0.3': {}
+
   acorn-jsx@5.3.2(acorn@8.15.0):
     dependencies:
       acorn: 8.15.0
 
   acorn@8.15.0: {}
+
+  ai@5.0.95(zod@4.1.12):
+    dependencies:
+      '@ai-sdk/gateway': 2.0.11(zod@4.1.12)
+      '@ai-sdk/provider': 2.0.0
+      '@ai-sdk/provider-utils': 3.0.17(zod@4.1.12)
+      '@opentelemetry/api': 1.9.0
+      zod: 4.1.12
 
   ajv@6.12.6:
     dependencies:
@@ -4365,13 +4407,13 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  next-redux-wrapper@8.1.0(next@16.0.3(@babel/core@7.28.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-redux@9.2.0(react@19.2.0)(redux@5.0.1))(react@19.2.0):
+  next-redux-wrapper@8.1.0(next@16.0.3(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react-redux@9.2.0(react@19.2.0)(redux@5.0.1))(react@19.2.0):
     dependencies:
-      next: 16.0.3(@babel/core@7.28.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      next: 16.0.3(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react: 19.2.0
       react-redux: 9.2.0(react@19.2.0)(redux@5.0.1)
 
-  next@16.0.3(@babel/core@7.28.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  next@16.0.3(@babel/core@7.28.5)(@opentelemetry/api@1.9.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
     dependencies:
       '@next/env': 16.0.3
       '@swc/helpers': 0.5.15
@@ -4389,6 +4431,7 @@ snapshots:
       '@next/swc-linux-x64-musl': 16.0.3
       '@next/swc-win32-arm64-msvc': 16.0.3
       '@next/swc-win32-x64-msvc': 16.0.3
+      '@opentelemetry/api': 1.9.0
       sharp: 0.34.5
     transitivePeerDependencies:
       - '@babel/core'

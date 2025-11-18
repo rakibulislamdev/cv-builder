@@ -333,7 +333,7 @@ export default function WorkExperience() {
                                     </div>
                                 </div>
 
-                                {/* Job Description/Responsibilities */}
+                                {/* Job Description */}
                                 <div className="space-y-2">
                                     <Label htmlFor={`description-${index}`} className="text-sm font-medium text-gray-700">Job Description/Responsibilities</Label>
                                     <Textarea
@@ -345,7 +345,7 @@ export default function WorkExperience() {
                                     />
                                 </div>
 
-                                {/* Skills and Achievements Container */}
+                                {/* Skills and Achievements  */}
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
                                     {/* Achievements Section */}

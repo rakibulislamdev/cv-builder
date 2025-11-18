@@ -21,7 +21,7 @@ export default function ContactInfo() {
     }
 
     const onBack = () => {
-        dispatch(setCurrentStep(5))
+        dispatch(setCurrentStep(4))
     }
 
     return (

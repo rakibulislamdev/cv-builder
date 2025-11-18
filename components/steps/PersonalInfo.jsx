@@ -63,7 +63,7 @@ export default function PersonalInfo() {
 
                 <CardContent>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                        {/* Name Row (Simplified for this example) */}
+                        {/* Name  */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="firstName" className="text-sm font-medium">First Name</Label>
@@ -92,7 +92,7 @@ export default function PersonalInfo() {
                             </div>
                         </div>
 
-                        {/* Contact Row (Simplified for this example) */}
+                        {/* Contact */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="phone" className="text-sm font-medium">Phone Number</Label>
@@ -128,7 +128,7 @@ export default function PersonalInfo() {
                             </div>
                         </div>
 
-                        {/* Address Section */}
+                        {/* Address */}
                         <div className="space-y-4">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 

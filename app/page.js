@@ -6,13 +6,32 @@ import PersonalInfo from "@/components/steps/PersonalInfo";
 import CareerSummary from "@/components/steps/CareerSummary";
 import WorkExperience from "@/components/steps/WorkExperience";
 import Education from "@/components/steps/Education";
-import Skills from "@/components/steps/Skills";
 import ContactInfo from "@/components/steps/ContactInfo";
 import Review from "@/components/steps/Review";
+import Certifications from "@/components/Certifications";
 
 export default function Home() {
   const currentStep = useSelector((state) => state.cv.currentStep);
+  const currentSection = useSelector((state) => state.cv.currentSection);
 
+  if (currentSection === "certifications") {
+    return (
+      <div className="min-h-screen bg-white">
+        <Stepper />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key="certifications"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Certifications />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    );
+  }
   const renderStep = () => {
     switch (currentStep) {
       case 1:
@@ -24,10 +43,8 @@ export default function Home() {
       case 4:
         return <Education />;
       case 5:
-        return <Skills />;
-      case 6:
         return <ContactInfo />;
-      case 7:
+      case 6:
         return <Review />;
       default:
         return <PersonalInfo />;
