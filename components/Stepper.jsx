@@ -12,10 +12,10 @@ const steps = [
 ]
 
 export default function Stepper() {
-    // Assuming 'currentStep' is a number from 1 to 7, default to 1
+
     const currentStep = useSelector((state) => state.cv.currentStep) || 1
 
-    // Calculate the percentage width for the green progress bar.
+
     const progressWidth = ((currentStep - 1) / (steps.length - 1)) * 100
 
     return (
@@ -37,9 +37,10 @@ export default function Stepper() {
                     {steps.map((step, index) => {
                         const stepNum = index + 1
                         const isActive = stepNum === currentStep
-
-
                         const isCompleted = stepNum < currentStep
+
+                        // if the step is either currently active OR has been completed
+                        const isStepActiveOrCompleted = isActive || isCompleted
 
                         return (
                             <div
@@ -50,11 +51,11 @@ export default function Stepper() {
 
                                 <div
                                     className={`w-8 h-8 sm:w-12 sm:h-12 rounded-full flex items-center justify-center font-bold text-base sm:text-lg transition-all relative z-10
-                                        ${!isActive
-                                            ? 'bg-white text-gray-500 border-2 border-gray-300'
+                                        ${!isStepActiveOrCompleted
+                                            ? 'bg-white text-gray-500 border-2 border-green-500'
                                             : ''
                                         }
-                                        ${isActive
+                                        ${isStepActiveOrCompleted
                                             ? 'bg-green-500 text-white border-2 border-green-500'
                                             : ''
                                         }

@@ -6,13 +6,43 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useDispatch, useSelector } from "react-redux"
 import { updatePersonalInfo, setCurrentStep } from "@/lib/cvSlice"
+// Lucide Icon
+import { ChevronDown, Globe } from "lucide-react" // Globe icon for left side, ChevronDown for right side
+
+// --- Sample Country List for the Select Field ---
+const COUNTRIES = [
+    { value: "Bangladesh", label: "Bangladesh" },
+    { value: "United States", label: "United States" },
+    { value: "Canada", label: "Canada" },
+    { value: "United Kingdom", label: "United Kingdom" },
+    { value: "Australia", label: "Australia" },
+    { value: "Germany", label: "Germany" },
+];
+// ------------------------------------------------
 
 export default function PersonalInfo() {
     const dispatch = useDispatch()
+
+    // Get current state from Redux (if any data was saved before)
     const personalInfo = useSelector((state) => state.cv.personalInfo)
 
+
+    const defaultFormValues = {
+        firstName: personalInfo.firstName,
+        lastName: personalInfo.lastName,
+        phone: personalInfo.phone,
+        email: personalInfo.email,
+        country: personalInfo.country || "Bangladesh",
+        city: personalInfo.city,
+        address: personalInfo.address,
+        state: personalInfo.state,
+        zipCode: personalInfo.zipCode,
+    };
+    // ---------------------------------
+
     const { register, handleSubmit, formState: { errors } } = useForm({
-        defaultValues: personalInfo
+        // Pass the combined default/Redux values to react-hook-form
+        defaultValues: defaultFormValues
     })
 
     const onSubmit = (data) => {
@@ -21,9 +51,9 @@ export default function PersonalInfo() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-            <Card className="w-full max-w-2xl shadow-xl">
-                <CardHeader className="text-center pb-4">
+        <div className="min-h-screen bg-white flex items-center justify-center p-4">
+            <Card className="w-full max-w-5xl shadow-none border-0">
+                <CardHeader className="pb-4">
                     <CardTitle className="text-2xl font-bold text-gray-800">
                         Tell Us About Yourself
                     </CardTitle>
@@ -34,13 +64,13 @@ export default function PersonalInfo() {
 
                 <CardContent>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                        {/* Name Row */}
+                        {/* Name Row (Simplified for this example) */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="firstName" className="text-sm font-medium">First Name</Label>
                                 <Input
                                     id="firstName"
-                                    placeholder="Salfur"
+                                    placeholder="e.g. John"
                                     {...register("firstName", { required: "First name is required" })}
                                     className="w-full"
                                 />
@@ -53,7 +83,7 @@ export default function PersonalInfo() {
                                 <Label htmlFor="lastName" className="text-sm font-medium">Last Name</Label>
                                 <Input
                                     id="lastName"
-                                    placeholder="Rahman"
+                                    placeholder="e.g. Doe"
                                     {...register("lastName", { required: "Last name is required" })}
                                     className="w-full"
                                 />
@@ -63,13 +93,13 @@ export default function PersonalInfo() {
                             </div>
                         </div>
 
-                        {/* Contact Row */}
+                        {/* Contact Row (Simplified for this example) */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="phone" className="text-sm font-medium">Phone Number</Label>
                                 <Input
                                     id="phone"
-                                    placeholder="+880 1567808747"
+                                    placeholder="e.g. +1 555-123-4567"
                                     {...register("phone", { required: "Phone number is required" })}
                                     className="w-full"
                                 />
@@ -83,7 +113,7 @@ export default function PersonalInfo() {
                                 <Input
                                     id="email"
                                     type="email"
-                                    placeholder="ux.salfur.info@gmail.com"
+                                    placeholder="e.g. john.doe@example.com"
                                     {...register("email", {
                                         required: "Email is required",
                                         pattern: {
@@ -101,44 +131,62 @@ export default function PersonalInfo() {
 
                         {/* Address Section */}
                         <div className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+
+                                <div className="space-y-2 col-span-1">
                                     <Label htmlFor="country" className="text-sm font-medium">Country/Region</Label>
+                                    <div className="relative">
+                                        <select
+                                            id="country"
+                                            {...register("country")}
+                                            className="w-full h-[40px] px-3 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-white appearance-none "
+                                        >
+                                            {COUNTRIES.map((country) => (
+                                                <option key={country.value} value={country.value}>
+                                                    {country.label}
+                                                </option>
+                                            ))}
+                                        </select>
+
+                                        <ChevronDown className="absolute md:left-70 left-90 top-1/2 transform -translate-y-1/2  text-gray-400 pointer-events-none" />
+                                    </div>
+                                    {errors.country && (
+                                        <p className="text-red-500 text-sm">{errors.country.message}</p>
+                                    )}
+                                </div>
+
+                                <div className="space-y-2 col-span-2">
+                                    <Label htmlFor="address" className="text-sm font-medium">Address</Label>
                                     <Input
-                                        id="country"
-                                        placeholder="Bangladesh"
-                                        {...register("country")}
+                                        id="address"
+                                        placeholder="e.g. 123 Main St."
+                                        {...register("address")}
                                         className="w-full"
                                     />
                                 </div>
+
+                            </div>
+
+
+
+                            <div className="grid grid-cols-3 gap-4">
 
                                 <div className="space-y-2">
                                     <Label htmlFor="city" className="text-sm font-medium">City</Label>
                                     <Input
                                         id="city"
-                                        placeholder="Dhaka"
+                                        placeholder="e.g. London"
                                         {...register("city")}
                                         className="w-full"
                                     />
                                 </div>
-                            </div>
 
-                            <div className="space-y-2">
-                                <Label htmlFor="address" className="text-sm font-medium">Address</Label>
-                                <Input
-                                    id="address"
-                                    placeholder="Section-06, Mirpur, Dhaka"
-                                    {...register("address")}
-                                    className="w-full"
-                                />
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="state" className="text-sm font-medium">State</Label>
                                     <Input
                                         id="state"
-                                        placeholder="Dhaka"
+                                        placeholder="e.g. Dhaka"
                                         {...register("state")}
                                         className="w-full"
                                     />
@@ -148,7 +196,7 @@ export default function PersonalInfo() {
                                     <Label htmlFor="zipCode" className="text-sm font-medium">ZIP Code</Label>
                                     <Input
                                         id="zipCode"
-                                        placeholder="1216"
+                                        placeholder="e.g. 10001"
                                         {...register("zipCode")}
                                         className="w-full"
                                     />
