@@ -3,7 +3,6 @@ import { generateText } from "ai";
 
 export async function POST(request) {
   try {
-    // Validate API Key
     if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
       return Response.json(
         { error: "Google AI API key not configured" },
@@ -14,57 +13,88 @@ export async function POST(request) {
     const cvData = await request.json();
 
     const prompt = `
-Generate a clean, professional, modern resume based on the following details.
+You are a professional resume writer. Enhance and improve the following resume data while maintaining all original information. Return ONLY a valid JSON object with this exact structure (no markdown, no code blocks, just pure JSON):
 
-### PERSONAL INFORMATION
-Name: ${cvData.personalInfo.firstName} ${cvData.personalInfo.lastName}
-Phone: ${cvData.personalInfo.phone}
-Email: ${cvData.personalInfo.email}
-Address: ${cvData.personalInfo.address}
+{
+  "personalInfo": {
+    "firstName": "enhanced first name",
+    "lastName": "enhanced last name",
+    "phone": "phone number",
+    "email": "email",
+    "address": "address",
+    "city": "city",
+    "state": "state",
+    "zipCode": "zipCode",
+    "country": "country",
+    "portfolio": "portfolio url",
+    "linkedin": "linkedin url"
+  },
+  "jobTitle": "enhanced professional job title",
+  "careerSummary": "enhanced 3-4 sentence professional summary highlighting key achievements and expertise",
+  "skills": ["skill1", "skill2", "skill3", ...],
+  "workExperience": [
+    {
+      "jobTitle": "job title",
+      "company": "company name",
+      "startDate": "start date",
+      "endDate": "end date",
+      "description": "enhanced 2-3 sentence description with achievements and impact"
+    }
+  ],
+  "education": [
+    {
+      "degree": "degree name",
+      "institution": "institution name",
+      "major": "major/field",
+      "startDate": "start",
+      "endDate": "end"
+    }
+  ],
+  "certifications": [
+    {
+      "title": "certification name",
+      "organization": "org name",
+      "issueDate": "date",
+      "description": "brief description"
+    }
+  ]
+}
 
-### CAREER SUMMARY
-${cvData.careerSummary}
+Original Data:
+${JSON.stringify(cvData, null, 2)}
 
-### WORK EXPERIENCE
-${cvData.workExperience
-  .map(
-    (exp) => `
-- **${exp.jobTitle}**, ${exp.company} (${exp.startDate} – ${exp.endDate})
-  ${exp.description}
-`
-  )
-  .join("\n")}
+Instructions:
+- Keep all original data but make it more professional and impactful
+- Enhance job descriptions to highlight achievements and quantifiable results
+- Improve career summary to be compelling and keyword-rich
+- Keep the same structure, just improve the wording
+- Return ONLY the JSON object, no other text
+`;
 
-### EDUCATION
-${cvData.education
-  .map(
-    (edu) => `
-- **${edu.degree}**, ${edu.institution}
-  Major: ${edu.major}
-  Duration: ${edu.startDate} – ${edu.endDate}
-`
-  )
-  .join("\n")}
-
-### SKILLS
-${cvData.skills.join(", ")}
-
-Create a polished resume with:
-- Clear section headers  
-- Bullet points where appropriate  
-- Professional tone  
-- Industry-standard formatting  
-    `;
-
-    // Generate Resume using latest Google model
     const result = await generateText({
       model: google("gemini-2.0-flash"),
       prompt,
-      maxOutputTokens: 2000,
+      maxOutputTokens: 3000,
     });
 
+    // Parse AI response and ensure it's valid JSON
+    let enhancedData;
+    try {
+      // Remove any markdown code blocks if present
+      const cleanText = result.text
+        .replace(/```json\n?/g, "")
+        .replace(/```\n?/g, "")
+        .trim();
+
+      enhancedData = JSON.parse(cleanText);
+    } catch (parseError) {
+      console.error("Failed to parse AI response:", result.text);
+      // Return original data if parsing fails
+      enhancedData = cvData;
+    }
+
     return Response.json({
-      resume: result.text,
+      resume: enhancedData,
     });
   } catch (error) {
     console.error("Error generating resume:", error);
