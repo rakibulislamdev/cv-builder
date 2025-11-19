@@ -11,7 +11,7 @@ export default function AIResumeGeneration() {
     const [isGenerating, setIsGenerating] = useState(false)
     const [error, setError] = useState("")
 
-    // রিডাক্স স্টেট থেকে ডেটা নেওয়া
+
     const cvData = useSelector(state => state.cv)
 
     const generateResumeWithAI = async () => {
@@ -19,7 +19,6 @@ export default function AIResumeGeneration() {
         setProgress(0)
         setError("")
 
-        // সিমুলেটেড প্রগ্রেস বার
         const interval = setInterval(() => {
             setProgress(prev => {
                 if (prev >= 90) {
@@ -30,7 +29,7 @@ export default function AIResumeGeneration() {
         }, 300)
 
         try {
-            // Debug: দেখি কি data যাচ্ছে
+
             console.log('Sending data to AI:', cvData)
 
             const response = await fetch('/api/generate-resume', {
@@ -51,10 +50,10 @@ export default function AIResumeGeneration() {
             clearInterval(interval)
             setProgress(100)
 
-            // জেনারেটেড রিজিউম স্টোরে সেভ করুন
+
             dispatch(setGeneratedResume(result.resume))
 
-            // 1.5 সেকেন্ড পর নেক্সট স্টেপে যাবে
+
             setTimeout(() => {
                 dispatch(setCurrentStep(7))
             }, 1500)
@@ -71,10 +70,7 @@ export default function AIResumeGeneration() {
         generateResumeWithAI()
     }
 
-    // Auto-start generation on component mount (optional)
-    // useEffect(() => {
-    //     generateResumeWithAI()
-    // }, [])
+
 
     return (
         <div className="min-h-screen bg-white flex items-start justify-center pt-[10vh] md:pt-[15vh] p-4">
@@ -96,7 +92,7 @@ export default function AIResumeGeneration() {
                             </div>
                         </div>
 
-                        {/* Progress Bar */}
+
                         <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-8">
                             <div
                                 className="h-full bg-green-500 rounded transition-all duration-300 ease-out"
@@ -104,14 +100,14 @@ export default function AIResumeGeneration() {
                             ></div>
                         </div>
 
-                        {/* Error Message */}
+
                         {error && (
                             <div className="text-red-500 text-sm bg-red-50 p-3 rounded border border-red-200">
                                 {error}
                             </div>
                         )}
 
-                        {/* Generate Button */}
+
                         <div className="flex justify-center pt-8">
                             <Button
                                 type="button"
@@ -131,7 +127,7 @@ export default function AIResumeGeneration() {
                             </Button>
                         </div>
 
-                        {/* Progress Percentage */}
+
                         {isGenerating && (
                             <div className="text-center text-gray-500 text-sm">
                                 {Math.round(progress)}% complete

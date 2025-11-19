@@ -23,11 +23,11 @@ export default function WorkExperience() {
     const workExperience = useSelector((state) => state.cv.workExperience)
     const fileInputRef = useRef(null)
 
-    // Safe date parsing function
+
     const parseDateSafe = (dateStr) => {
         if (!dateStr) return null
         try {
-            // Try to parse from dd/MM/yyyy format (from Redux)
+
             const parsed = parse(dateStr, 'dd/MM/yyyy', new Date())
             return isValid(parsed) ? parsed : null
         } catch {
@@ -143,7 +143,7 @@ export default function WorkExperience() {
         }))
         setUploadedFiles(prev => [...prev, ...newFiles])
 
-        // Store file information in achievements
+
         const fileNames = files.map(file => file.name)
         const updatedExperiences = experiences.map((exp, i) => {
             if (i === 0) {
@@ -162,7 +162,6 @@ export default function WorkExperience() {
         const updatedFiles = uploadedFiles.filter((_, i) => i !== index)
         setUploadedFiles(updatedFiles)
 
-        // Remove from achievements too
         const updatedExperiences = experiences.map((exp, i) => {
             if (i === 0) {
                 const updatedAchievements = exp.achievements.filter(achievement =>
@@ -190,7 +189,7 @@ export default function WorkExperience() {
     const onSubmit = (e) => {
         e.preventDefault()
 
-        // Safe date formatting
+
         const formattedExperiences = experiences.map(exp => ({
             ...exp,
             startDate: exp.startDate && isValid(exp.startDate) ? format(exp.startDate, 'dd/MM/yyyy') : '',
@@ -202,9 +201,9 @@ export default function WorkExperience() {
         console.log('Saving work experience:', formattedExperiences)
         dispatch(updateWorkExperience(formattedExperiences))
 
-        // Main skills array তেও সব skills save করুন
+
         const allSkills = experiences.flatMap(exp => exp.skills || [])
-        const uniqueSkills = [...new Set(allSkills)] // Duplicate remove
+        const uniqueSkills = [...new Set(allSkills)]
         console.log('Saving skills:', uniqueSkills)
         dispatch(updateSkills(uniqueSkills))
 
@@ -212,7 +211,7 @@ export default function WorkExperience() {
     }
 
     const onSkip = () => {
-        // Safe date formatting
+
         const formattedExperiences = experiences.map(exp => ({
             ...exp,
             startDate: exp.startDate && isValid(exp.startDate) ? format(exp.startDate, 'dd/MM/yyyy') : '',
@@ -224,7 +223,7 @@ export default function WorkExperience() {
         console.log('Skipping with work experience:', formattedExperiences)
         dispatch(updateWorkExperience(formattedExperiences))
 
-        // Main skills array তেও save করুন
+
         const allSkills = experiences.flatMap(exp => exp.skills || [])
         const uniqueSkills = [...new Set(allSkills)]
         console.log('Skipping with skills:', uniqueSkills)
@@ -292,7 +291,7 @@ export default function WorkExperience() {
                                     />
                                 </div>
 
-                                {/* Company Name */}
+
                                 <div className="space-y-2">
                                     <Label htmlFor={`company-${index}`} className="text-sm font-medium text-gray-700">Company Name</Label>
                                     <Input
@@ -304,7 +303,7 @@ export default function WorkExperience() {
                                     />
                                 </div>
 
-                                {/* Duration - Single Row with Date Pickers */}
+
                                 <div className="space-y-2">
                                     <Label className="text-sm font-medium text-gray-700">Duration</Label>
                                     <div className="grid grid-cols-2 gap-4">
@@ -376,14 +375,13 @@ export default function WorkExperience() {
                                     />
                                 </div>
 
-                                {/* Skills and Achievements  */}
+
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-                                    {/* Achievements Section */}
                                     <div className="space-y-3">
                                         <Label className="text-sm font-medium text-gray-700">Achievements</Label>
 
-                                        {/* File Upload Area */}
+
                                         <div
                                             className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors cursor-pointer bg-white"
                                             onClick={handleBrowseClick}
@@ -404,7 +402,7 @@ export default function WorkExperience() {
                                             </Button>
                                         </div>
 
-                                        {/* Hidden File Input */}
+
                                         <input
                                             type="file"
                                             ref={fileInputRef}

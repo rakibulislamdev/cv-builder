@@ -22,7 +22,7 @@ const COUNTRIES = [
 export default function PersonalInfo() {
     const dispatch = useDispatch()
 
-    // Get current state from Redux (if any data was saved before)
+
     const personalInfo = useSelector((state) => state.cv.personalInfo)
 
 

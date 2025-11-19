@@ -23,7 +23,7 @@ export default function ContactInfo() {
         defaultValues: contactInfo
     })
 
-    // Other Social Media state
+
     const [otherSocial, setOtherSocial] = useState(
         contactInfo.otherSocial || { platform: "", url: "" }
     )
@@ -38,10 +38,10 @@ export default function ContactInfo() {
             otherSocial: otherSocial.platform && otherSocial.url ? otherSocial : null
         }
 
-        // contactInfo তে save করুন
+
         dispatch(updateContactInfo(formData))
 
-        // personalInfo তেও portfolio/linkedin save করুন
+
         dispatch(updatePersonalInfo({
             portfolio: data.portfolio,
             linkedin: data.linkedin
