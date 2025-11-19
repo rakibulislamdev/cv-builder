@@ -17,10 +17,21 @@ export default function Certifications() {
     const certificationsData = useSelector((state) => state.cv.certifications)
     const currentSection = useSelector((state) => state.cv.currentSection)
 
+
     const parseDateString = (dateStr) => {
         if (!dateStr) return null
-        const [day, month, year] = dateStr.split('/').map(Number)
-        return new Date(year, month - 1, day)
+        try {
+            const [day, month, year] = dateStr.split('/').map(Number)
+            const date = new Date(year, month - 1, day)
+            return date instanceof Date && !isNaN(date.getTime()) ? date : null
+        } catch (error) {
+            return null
+        }
+    }
+
+    // Safe date validation
+    const isValidDate = (date) => {
+        return date instanceof Date && !isNaN(date.getTime())
     }
 
     const initialCertifications = certificationsData.length > 0 ? certificationsData.map(cert => ({
@@ -32,10 +43,6 @@ export default function Certifications() {
     ]
 
     const [certifications, setCertifications] = useState(initialCertifications)
-
-    // Debug: Check current state
-    console.log('Current certifications in component:', certifications)
-    console.log('Current certificationsData from Redux:', certificationsData)
 
     const addCertification = () => {
         setCertifications([...certifications, { title: "", organization: "", issueDate: null, expiryDate: null }])
@@ -57,28 +64,22 @@ export default function Certifications() {
     const saveCertifications = () => {
         const formattedCertifications = certifications.map(cert => ({
             ...cert,
-            issueDate: cert.issueDate ? format(cert.issueDate, 'dd/MM/yyyy') : '',
-            expiryDate: cert.expiryDate ? format(cert.expiryDate, 'dd/MM/yyyy') : '',
+            issueDate: cert.issueDate && isValidDate(cert.issueDate) ? format(cert.issueDate, 'dd/MM/yyyy') : '',
+            expiryDate: cert.expiryDate && isValidDate(cert.expiryDate) ? format(cert.expiryDate, 'dd/MM/yyyy') : '',
         }))
 
-        console.log('Saving certifications to Redux:', formattedCertifications)
         dispatch(updateCertifications(formattedCertifications))
         return formattedCertifications
     }
 
     const onSubmit = (e) => {
         e.preventDefault()
-        console.log('Form submitted')
-
         const savedData = saveCertifications()
-        console.log('Saved data:', savedData)
-
         dispatch(setCurrentSection('education'))
         dispatch(setCurrentStep(5))
     }
 
     const handleEducationClick = () => {
-        console.log('Education button clicked')
         saveCertifications()
         dispatch(setCurrentSection('education'))
     }
@@ -161,7 +162,7 @@ export default function Certifications() {
                                                         variant="outline"
                                                         className={cn("w-full justify-between text-left font-normal border-gray-300", boldGrayFocus, !cert.issueDate && "text-gray-400")}
                                                     >
-                                                        {cert.issueDate ? format(cert.issueDate, "dd/MM/yyyy") : "Issue Date"}
+                                                        {cert.issueDate && isValidDate(cert.issueDate) ? format(cert.issueDate, "dd/MM/yyyy") : "Issue Date"}
                                                         <CalendarIcon className="ml-2 h-4 w-4 opacity-50" />
                                                     </Button>
                                                 </PopoverTrigger>
@@ -176,7 +177,6 @@ export default function Certifications() {
                                             </Popover>
                                         </div>
 
-
                                         <div className="space-y-2">
                                             <Popover>
                                                 <PopoverTrigger asChild>
@@ -184,7 +184,7 @@ export default function Certifications() {
                                                         variant="outline"
                                                         className={cn("w-full justify-between text-left font-normal border-gray-300", boldGrayFocus, !cert.expiryDate && "text-gray-400")}
                                                     >
-                                                        {cert.expiryDate ? format(cert.expiryDate, "dd/MM/yyyy") : "Expiry Date (if applicable)"}
+                                                        {cert.expiryDate && isValidDate(cert.expiryDate) ? format(cert.expiryDate, "dd/MM/yyyy") : "Expiry Date (if applicable)"}
                                                         <CalendarIcon className="ml-2 h-4 w-4 opacity-50" />
                                                     </Button>
                                                 </PopoverTrigger>

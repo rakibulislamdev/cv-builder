@@ -21,14 +21,30 @@ export default function Education() {
 
     const parseDateString = (dateStr) => {
         if (!dateStr) return null
-        const [day, month, year] = dateStr.split('/').map(Number)
-        return new Date(year, month - 1, day)
+        try {
+            // Handle different date formats
+            if (dateStr.includes('/')) {
+                const [day, month, year] = dateStr.split('/').map(Number)
+                return new Date(year, month - 1, day)
+            } else if (dateStr.includes('-')) {
+                return new Date(dateStr)
+            }
+            return null
+        } catch (error) {
+            console.error('Error parsing date:', dateStr, error)
+            return null
+        }
+    }
+
+    // Safe date validation function
+    const isValidDate = (date) => {
+        return date instanceof Date && !isNaN(date.getTime())
     }
 
     const initialEducationState = education.length > 0 ? education.map(edu => ({
         ...edu,
-        startDate: parseDateString(edu.startDate),
-        endDate: parseDateString(edu.endDate),
+        startDate: isValidDate(parseDateString(edu.startDate)) ? parseDateString(edu.startDate) : null,
+        endDate: isValidDate(parseDateString(edu.endDate)) ? parseDateString(edu.endDate) : null,
         achievements: edu.achievements || []
     })) : [
         { degree: "", institution: "", major: "", startDate: null, endDate: null, achievements: [] }
@@ -37,7 +53,6 @@ export default function Education() {
     const [educations, setEducations] = useState(initialEducationState)
 
     const [uploadedFiles, setUploadedFiles] = useState([])
-
 
     const addEducation = () => {
         setEducations([...educations, { degree: "", institution: "", major: "", startDate: null, endDate: null, achievements: [] }])
@@ -55,7 +70,6 @@ export default function Education() {
         )
         setEducations(updated)
     }
-
 
     const handleFileUpload = (event) => {
         const files = Array.from(event.target.files)
@@ -109,13 +123,11 @@ export default function Education() {
         handleBrowseClick()
     }
 
-
-
     const saveAndAdvance = (step) => {
         const formattedEducations = educations.map(edu => ({
             ...edu,
-            startDate: edu.startDate ? format(edu.startDate, 'dd/MM/yyyy') : '',
-            endDate: edu.endDate ? format(edu.endDate, 'dd/MM/yyyy') : '',
+            startDate: edu.startDate && isValidDate(edu.startDate) ? format(edu.startDate, 'dd/MM/yyyy') : '',
+            endDate: edu.endDate && isValidDate(edu.endDate) ? format(edu.endDate, 'dd/MM/yyyy') : '',
             achievements: edu.achievements || []
         }))
         dispatch(updateEducation(formattedEducations))
@@ -128,18 +140,16 @@ export default function Education() {
     }
 
     const handleCertificationsClick = () => {
-
         const formattedEducations = educations.map(edu => ({
             ...edu,
-            startDate: edu.startDate ? format(edu.startDate, 'dd/MM/yyyy') : '',
-            endDate: edu.endDate ? format(edu.endDate, 'dd/MM/yyyy') : '',
+            startDate: edu.startDate && isValidDate(edu.startDate) ? format(edu.startDate, 'dd/MM/yyyy') : '',
+            endDate: edu.endDate && isValidDate(edu.endDate) ? format(edu.endDate, 'dd/MM/yyyy') : '',
             achievements: edu.achievements || []
         }))
         dispatch(updateEducation(formattedEducations))
-
-
         dispatch(setCurrentSection('certifications'))
     }
+
     const onBack = () => {
         dispatch(setCurrentStep(3))
     }
@@ -235,7 +245,7 @@ export default function Education() {
                                                         variant="outline"
                                                         className={cn("w-full justify-between text-left font-normal border-gray-300", boldGrayFocus, !edu.startDate && "text-gray-400")}
                                                     >
-                                                        {edu.startDate ? format(edu.startDate, "dd/MM/yyyy") : "Start Date"}
+                                                        {edu.startDate && isValidDate(edu.startDate) ? format(edu.startDate, "dd/MM/yyyy") : "Start Date"}
                                                         <CalendarIcon className="ml-2 h-4 w-4 opacity-50" />
                                                     </Button>
                                                 </PopoverTrigger>
@@ -258,7 +268,7 @@ export default function Education() {
                                                         variant="outline"
                                                         className={cn("w-full justify-between text-left font-normal border-gray-300", boldGrayFocus, !edu.endDate && "text-gray-400")}
                                                     >
-                                                        {edu.endDate ? format(edu.endDate, "dd/MM/yyyy") : "End Date"}
+                                                        {edu.endDate && isValidDate(edu.endDate) ? format(edu.endDate, "dd/MM/yyyy") : "End Date"}
                                                         <CalendarIcon className="ml-2 h-4 w-4 opacity-50" />
                                                     </Button>
                                                 </PopoverTrigger>
