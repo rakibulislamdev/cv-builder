@@ -3,7 +3,7 @@ import { useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { Download, Briefcase } from "lucide-react"
 import { setCurrentStep } from "@/lib/cvSlice"
-import { Mail, Phone, MapPinHouse, Globe } from 'lucide-react';
+import { Mail, Phone, MapPinHouse } from 'lucide-react';
 import Image from "next/image"
 
 const SectionHeading = ({ children }) => (
@@ -50,7 +50,7 @@ const ResumePreview = ({ resumeRef, cvData }) => {
                 width: '210mm',
                 minHeight: '297mm',
                 padding: '15mm',
-                fontFamily: 'Arial, sans-serif',
+                fontFamily: 'Arial, Helvetica, sans-serif',
             }}
         >
             {/* Header Section */}
@@ -313,7 +313,7 @@ export default function Review() {
             const imgHeight = (canvas.height * imgWidth) / canvas.width
 
             pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight)
-            pdf.save('Resume_AI_Enhanced.pdf')
+            pdf.save(`Resume_${cvData.personalInfo.firstName}_${cvData.personalInfo.lastName}.pdf`)
 
         } catch (error) {
             console.error('Download failed:', error)
@@ -348,7 +348,7 @@ export default function Review() {
                     <button
                         onClick={handleDownload}
                         disabled={isDownloading}
-                        className="flex items-center gap-2 px-6 py-3 border-2 border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="flex items-center gap-2 px-6 cursor-pointer py-3 border-2 border-gray-300 rounded-lg text-gray-700 font-semibold hover:bg-gray-50 transition-colors disabled:opacity-50  disabled:cursor-not-allowed"
                     >
                         <Download size={18} />
                         {isDownloading ? 'Downloading...' : 'Download Resume'}
@@ -368,3 +368,6 @@ export default function Review() {
         </div>
     )
 }
+
+
+
