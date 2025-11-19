@@ -5,10 +5,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useDispatch, useSelector } from "react-redux"
-import { updateWorkExperience, setCurrentStep } from "@/lib/cvSlice"
+import { updateWorkExperience, setCurrentStep, updateSkills } from "@/lib/cvSlice"
 import { Plus, Upload, X, FileText, CalendarIcon } from "lucide-react"
 import { useState, useRef } from "react"
-import { format } from "date-fns"
+import { format, isValid, parse } from "date-fns"
 import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
 import {
@@ -23,9 +23,23 @@ export default function WorkExperience() {
     const workExperience = useSelector((state) => state.cv.workExperience)
     const fileInputRef = useRef(null)
 
+    // Safe date parsing function
+    const parseDateSafe = (dateStr) => {
+        if (!dateStr) return null
+        try {
+            // Try to parse from dd/MM/yyyy format (from Redux)
+            const parsed = parse(dateStr, 'dd/MM/yyyy', new Date())
+            return isValid(parsed) ? parsed : null
+        } catch {
+            return null
+        }
+    }
+
     const [experiences, setExperiences] = useState(
         workExperience.length > 0 ? workExperience.map(exp => ({
             ...exp,
+            startDate: parseDateSafe(exp.startDate),
+            endDate: parseDateSafe(exp.endDate),
             skills: exp.skills || [],
             achievements: exp.achievements || []
         })) : [
@@ -175,30 +189,47 @@ export default function WorkExperience() {
 
     const onSubmit = (e) => {
         e.preventDefault()
+
+        // Safe date formatting
         const formattedExperiences = experiences.map(exp => ({
             ...exp,
-
-            startDate: exp.startDate ? format(exp.startDate, 'dd/MM/yyyy') : '',
-            endDate: exp.endDate ? format(exp.endDate, 'dd/MM/yyyy') : '',
-
+            startDate: exp.startDate && isValid(exp.startDate) ? format(exp.startDate, 'dd/MM/yyyy') : '',
+            endDate: exp.endDate && isValid(exp.endDate) ? format(exp.endDate, 'dd/MM/yyyy') : '',
             skills: exp.skills || [],
-
             achievements: exp.achievements || []
         }))
+
+        console.log('Saving work experience:', formattedExperiences)
         dispatch(updateWorkExperience(formattedExperiences))
+
+        // Main skills array তেও সব skills save করুন
+        const allSkills = experiences.flatMap(exp => exp.skills || [])
+        const uniqueSkills = [...new Set(allSkills)] // Duplicate remove
+        console.log('Saving skills:', uniqueSkills)
+        dispatch(updateSkills(uniqueSkills))
+
         dispatch(setCurrentStep(4))
     }
 
     const onSkip = () => {
-
+        // Safe date formatting
         const formattedExperiences = experiences.map(exp => ({
             ...exp,
-            startDate: exp.startDate ? format(exp.startDate, 'dd/MM/yyyy') : '',
-            endDate: exp.endDate ? format(exp.endDate, 'dd/MM/yyyy') : '',
+            startDate: exp.startDate && isValid(exp.startDate) ? format(exp.startDate, 'dd/MM/yyyy') : '',
+            endDate: exp.endDate && isValid(exp.endDate) ? format(exp.endDate, 'dd/MM/yyyy') : '',
             skills: exp.skills || [],
             achievements: exp.achievements || []
         }))
+
+        console.log('Skipping with work experience:', formattedExperiences)
         dispatch(updateWorkExperience(formattedExperiences))
+
+        // Main skills array তেও save করুন
+        const allSkills = experiences.flatMap(exp => exp.skills || [])
+        const uniqueSkills = [...new Set(allSkills)]
+        console.log('Skipping with skills:', uniqueSkills)
+        dispatch(updateSkills(uniqueSkills))
+
         dispatch(setCurrentStep(4))
     }
 
@@ -289,7 +320,7 @@ export default function WorkExperience() {
                                                             !exp.startDate && "text-gray-400"
                                                         )}
                                                     >
-                                                        {exp.startDate ? format(exp.startDate, "dd/MM/yyyy") : "Start Date"}
+                                                        {exp.startDate && isValid(exp.startDate) ? format(exp.startDate, "dd/MM/yyyy") : "Start Date"}
                                                         <CalendarIcon className="ml-2 h-4 w-4 opacity-50" />
                                                     </Button>
                                                 </PopoverTrigger>
@@ -316,7 +347,7 @@ export default function WorkExperience() {
                                                             !exp.endDate && "text-gray-400"
                                                         )}
                                                     >
-                                                        {exp.endDate ? format(exp.endDate, "dd/MM/yyyy") : "End Date"}
+                                                        {exp.endDate && isValid(exp.endDate) ? format(exp.endDate, "dd/MM/yyyy") : "End Date"}
                                                         <CalendarIcon className="ml-2 h-4 w-4 opacity-50" />
                                                     </Button>
                                                 </PopoverTrigger>

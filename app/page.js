@@ -9,6 +9,7 @@ import Education from "@/components/steps/Education";
 import ContactInfo from "@/components/steps/ContactInfo";
 import Review from "@/components/steps/Review";
 import Certifications from "@/components/Certifications";
+import AIResumeGeneration from "@/components/steps/AIResumeGeneration";
 
 export default function Home() {
   const currentStep = useSelector((state) => state.cv.currentStep);
@@ -45,6 +46,8 @@ export default function Home() {
       case 5:
         return <ContactInfo />;
       case 6:
+        return <AIResumeGeneration />;
+      case 7:
         return <Review />;
       default:
         return <PersonalInfo />;

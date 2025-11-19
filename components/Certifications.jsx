@@ -17,7 +17,6 @@ export default function Certifications() {
     const certificationsData = useSelector((state) => state.cv.certifications)
     const currentSection = useSelector((state) => state.cv.currentSection)
 
-
     const parseDateString = (dateStr) => {
         if (!dateStr) return null
         const [day, month, year] = dateStr.split('/').map(Number)
@@ -33,6 +32,10 @@ export default function Certifications() {
     ]
 
     const [certifications, setCertifications] = useState(initialCertifications)
+
+    // Debug: Check current state
+    console.log('Current certifications in component:', certifications)
+    console.log('Current certificationsData from Redux:', certificationsData)
 
     const addCertification = () => {
         setCertifications([...certifications, { title: "", organization: "", issueDate: null, expiryDate: null }])
@@ -51,45 +54,32 @@ export default function Certifications() {
         setCertifications(updated)
     }
 
-
-
-    const saveAndAdvance = (step) => {
-
+    const saveCertifications = () => {
         const formattedCertifications = certifications.map(cert => ({
             ...cert,
             issueDate: cert.issueDate ? format(cert.issueDate, 'dd/MM/yyyy') : '',
             expiryDate: cert.expiryDate ? format(cert.expiryDate, 'dd/MM/yyyy') : '',
         }))
 
+        console.log('Saving certifications to Redux:', formattedCertifications)
         dispatch(updateCertifications(formattedCertifications))
-        dispatch(setCurrentStep(step))
+        return formattedCertifications
     }
 
     const onSubmit = (e) => {
         e.preventDefault()
+        console.log('Form submitted')
 
-        const formattedCertifications = certifications.map(cert => ({
-            ...cert,
-            issueDate: cert.issueDate ? format(cert.issueDate, 'dd/MM/yyyy') : '',
-            expiryDate: cert.expiryDate ? format(cert.expiryDate, 'dd/MM/yyyy') : '',
-        }))
+        const savedData = saveCertifications()
+        console.log('Saved data:', savedData)
 
-        dispatch(updateCertifications(formattedCertifications))
         dispatch(setCurrentSection('education'))
         dispatch(setCurrentStep(5))
     }
 
-
     const handleEducationClick = () => {
-
-        const formattedCertifications = certifications.map(cert => ({
-            ...cert,
-            issueDate: cert.issueDate ? format(cert.issueDate, 'dd/MM/yyyy') : '',
-            expiryDate: cert.expiryDate ? format(cert.expiryDate, 'dd/MM/yyyy') : '',
-        }))
-        dispatch(updateCertifications(formattedCertifications))
-
-
+        console.log('Education button clicked')
+        saveCertifications()
         dispatch(setCurrentSection('education'))
     }
 
