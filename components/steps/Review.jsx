@@ -16,6 +16,7 @@ const ResumePreview = () => {
     const cvData = useSelector(state => state.cv)
 
 
+
     const fallbackPersonalInfo = {
         firstName: 'SAIFUR',
         lastName: 'RAHMAN',
@@ -93,7 +94,7 @@ const ResumePreview = () => {
                             {personalInfo.firstName || 'YOUR'} {personalInfo.lastName || 'NAME'}
                         </h1>
                         <p className="text-sm font-semibold text-gray-700">
-                            {personalInfo.jobTitle || 'Your Profession'}
+                            {cvData.jobTitle || 'Your Profession'}
                         </p>
                     </div>
                 </div>

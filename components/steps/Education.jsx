@@ -12,6 +12,7 @@ import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import NextButton from "../NextButton"
 
 export default function Education() {
     const dispatch = useDispatch()
@@ -350,15 +351,7 @@ export default function Education() {
                             </Button>
                         </div>
 
-                        {/* Navigation Buttons */}
-                        <div className="flex justify-between pt-6 mt-6">
-                            <Button type="button" onClick={onBack} variant="outline" className="border-gray-300 text-gray-700 hover:bg-gray-50">
-                                Back
-                            </Button>
-                            <Button type="submit" className="bg-blue-600 hover:bg-blue-700 px-8 text-white font-medium">
-                                Next Step
-                            </Button>
-                        </div>
+                        <NextButton />
                     </form>
                 </CardContent>
             </Card>

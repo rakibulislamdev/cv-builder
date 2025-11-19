@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { useDispatch, useSelector } from "react-redux"
 import { updatePersonalInfo, setCurrentStep } from "@/lib/cvSlice"
 import { ChevronDown } from "lucide-react"
+import NextButton from "../NextButton"
 
 
 const COUNTRIES = [
@@ -203,11 +204,7 @@ export default function PersonalInfo() {
                             </div>
                         </div>
 
-                        <div className="flex justify-end pt-4">
-                            <Button type="submit" className="bg-blue-600 hover:bg-blue-700 px-8">
-                                Next Step
-                            </Button>
-                        </div>
+                        <NextButton />
                     </form>
                 </CardContent>
             </Card>

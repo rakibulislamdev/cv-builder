@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useDispatch, useSelector } from "react-redux"
 import { updateCareerSummary, setCurrentStep, updateJobTitle } from "@/lib/cvSlice"
+import NextButton from "../NextButton"
 
 export default function CareerSummary() {
     const dispatch = useDispatch()
@@ -64,14 +65,7 @@ export default function CareerSummary() {
                             />
                         </div>
 
-                        <div className="flex justify-between pt-4">
-                            <Button type="button" onClick={onBack} variant="outline">
-                                Back
-                            </Button>
-                            <Button type="submit" className="bg-blue-600 hover:bg-blue-700 px-8">
-                                Next Step
-                            </Button>
-                        </div>
+                        <NextButton />
                     </form>
                 </CardContent>
             </Card>

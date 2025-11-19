@@ -14,6 +14,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import NextButton from "../NextButton"
 
 export default function ContactInfo() {
     const dispatch = useDispatch()
@@ -160,14 +161,7 @@ export default function ContactInfo() {
                         </div>
 
                         {/* Buttons */}
-                        <div className="flex justify-between pt-6">
-                            <Button type="button" onClick={onBack} variant="outline" className="border-gray-300 text-gray-700">
-                                Back
-                            </Button>
-                            <Button type="submit" className="bg-blue-600 hover:bg-blue-700 px-8 text-white font-medium">
-                                Next
-                            </Button>
-                        </div>
+                        <NextButton />
                     </form>
                 </CardContent>
             </Card>
